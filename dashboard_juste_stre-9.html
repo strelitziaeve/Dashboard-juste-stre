@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard @juste_stre — Face caméra</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f5f5;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  --color-border-primary: #cccccc;
+  --color-border-secondary: #e0e0e0;
+  --color-border-tertiary: #eeeeee;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background-primary: #1a1a1a;
+    --color-background-secondary: #2a2a2a;
+    --color-text-primary: #f0f0f0;
+    --color-text-secondary: #aaaaaa;
+    --color-text-tertiary: #666666;
+    --color-border-primary: #444444;
+    --color-border-secondary: #333333;
+    --color-border-tertiary: #2a2a2a;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);background:var(--color-background-primary);padding:1rem;}
+.app{max-width:800px;margin:0 auto;padding:1rem 0}
+.header{font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-secondary);}
+.header span{font-size:13px;font-weight:400;color:var(--color-text-secondary);display:block;margin-top:4px;}
+.tabs{display:flex;gap:5px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:6px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);position:relative;white-space:nowrap}
+.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500;border-color:var(--color-border-primary)}
+.tab-badge{position:absolute;top:-5px;right:-5px;background:#E24B4A;color:#fff;font-size:10px;font-weight:500;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.section{display:none}.section.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.card-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem}
+.btn{padding:7px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;font-size:13px}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-primary{background:var(--color-background-secondary);font-weight:500}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:0.75rem}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);margin:2px}
+.tag-c{background:#E6F1FB;color:#0C447C}
+.tag-conf{background:#EAF3DE;color:#27500A}
+.tag-conv{background:#FAEEDA;color:#633806}
+.tag-prep{background:#EEEDFE;color:#3C3489}
+.idea-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:0.875rem 1rem;margin-bottom:0.75rem;background:var(--color-background-primary)}
+.idea-hook{font-size:15px;font-weight:500;line-height:1.5;margin-bottom:6px;font-style:italic}
+.idea-meta{font-size:12px;color:var(--color-text-secondary);margin-bottom:10px}
+.idea-actions{display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{padding:5px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-size:12px}
+.mini-btn:hover{background:var(--color-background-secondary)}
+.mini-btn-accent{border-color:#7F77DD;color:#3C3489}
+input[type=text],input[type=number],select,textarea{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 10px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+textarea{width:100%;resize:vertical}
+.field-row{display:flex;gap:8px;margin-bottom:0.75rem;align-items:center;flex-wrap:wrap}
+.field-row label{font-size:13px;color:var(--color-text-secondary);min-width:90px}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:1rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.875rem}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.metric-value{font-size:20px;font-weight:500}
+.pub-row{display:flex;gap:10px;align-items:flex-start;padding:0.75rem 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.pub-row:last-child{border-bottom:none}
+.pub-info{flex:1;min-width:0}
+.pub-title{font-size:14px;font-weight:500;margin-bottom:3px;word-break:break-word}
+.pub-meta{font-size:12px;color:var(--color-text-secondary)}
+.score-badge{font-size:12px;padding:3px 8px;border-radius:var(--border-radius-md);font-weight:500;white-space:nowrap}
+.score-high{background:#EAF3DE;color:#27500A}
+.score-mid{background:#FAEEDA;color:#633806}
+.score-low{background:#FCEBEB;color:#791F1F}
+.score-na{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.analysis-block{border-left:3px solid;padding:0.75rem 1rem;margin-bottom:0.75rem;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;background:var(--color-background-secondary)}
+.ab-win{border-color:#639922}.ab-lose{border-color:#E24B4A}.ab-insight{border-color:#7F77DD}.ab-ratio{border-color:#BA7517}
+.ab-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.ab-win .ab-label{color:#639922}.ab-lose .ab-label{color:#E24B4A}.ab-insight .ab-label{color:#7F77DD}.ab-ratio .ab-label{color:#BA7517}
+.ab-text{font-size:13px;line-height:1.6}
+.ratio-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:8px 0}
+.rb-c{background:#378ADD}.rb-conf{background:#639922}.rb-conv{background:#BA7517}
+.empty-state{font-size:13px;color:var(--color-text-tertiary);padding:1.5rem 0;text-align:center}
+.del-btn{font-size:11px;padding:3px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-tertiary);cursor:pointer;white-space:nowrap}
+.del-btn:hover{color:#E24B4A;border-color:#E24B4A}
+.ratio-legend{display:flex;gap:12px;font-size:12px;color:var(--color-text-secondary);margin-top:6px;flex-wrap:wrap}
+.rl-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.prep-card{border:0.5px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:0.875rem 1rem;margin-bottom:0.75rem;background:#EEEDFE}
+.prep-hook{font-size:14px;font-weight:500;color:#26215C;margin-bottom:4px}
+.prep-meta{font-size:12px;color:#534AB7;margin-bottom:8px}
+.checklist-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.checklist-item:last-child{border-bottom:none}
+.check-box{width:18px;height:18px;border:0.5px solid var(--color-border-secondary);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#639922}
+.check-text{font-size:14px;line-height:1.5}
+.check-text.done{text-decoration:line-through;color:var(--color-text-tertiary)}
+.toast{border-radius:var(--border-radius-md);padding:8px 14px;font-size:13px;margin-bottom:0.75rem;display:none}
+.toast-success{background:#EAF3DE;color:#27500A;border:0.5px solid #97C459}
+.alert-card{border:0.5px solid #EF9F27;border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;background:#FAEEDA}
+.upload-zone{border:1px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1.5rem 1rem;text-align:center;cursor:pointer;background:var(--color-background-secondary);margin-bottom:0.75rem}
+.upload-zone:hover{border-color:var(--color-border-primary)}
+.upload-zone input{display:none}
+.screen-preview img{width:100%;display:block;max-height:280px;object-fit:contain;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:0.75rem}
+.screen-thumb{width:60px;height:60px;border-radius:var(--border-radius-md);object-fit:cover;border:0.5px solid var(--color-border-tertiary);flex-shrink:0}
+.reply-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem;margin-bottom:0.75rem;border-left:3px solid #7F77DD}
+.reply-label{font-size:11px;color:#534AB7;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em}
+.reply-text{font-size:13px;line-height:1.6}
+.copy-btn{font-size:11px;padding:3px 8px;border:0.5px solid #AFA9EC;border-radius:var(--border-radius-md);background:transparent;color:#534AB7;cursor:pointer;margin-top:6px}
+.comment-item{padding:0.75rem 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.comment-item:last-child{border-bottom:none}
+.comment-img{width:100%;max-height:200px;object-fit:contain;border-radius:var(--border-radius-md);margin-bottom:0.5rem;background:var(--color-background-secondary)}
+.account-tag{display:flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;background:var(--color-background-secondary)}
+.account-tag button{border:none;background:none;color:var(--color-text-tertiary);cursor:pointer;font-size:14px;padding:0}
+.ai-classif{background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-top:0.75rem}
+.ai-classif-title{font-size:13px;font-weight:500;color:#26215C;margin-bottom:8px}
+.ai-classif-body{font-size:13px;color:#3C3489;line-height:1.6;margin-bottom:10px;font-style:italic}
+.classif-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ai-loading{font-size:13px;color:var(--color-text-secondary);padding:0.75rem 0;font-style:italic}
+.claude-chat{display:flex;flex-direction:column;gap:12px;min-height:60px}
+.claude-msg{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:0.875rem 1rem;font-size:13px;line-height:1.6;max-width:90%}
+.claude-msg.user{align-self:flex-end;background:#EEEDFE;color:#26215C}
+.veille-accounts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.note-info{font-size:12px;color:var(--color-text-tertiary);padding:0.5rem 0;font-style:italic}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+  @juste_stre — Face caméra
+  <span>Dashboard stratégie Instagram · Données sauvegardées dans ton navigateur</span>
+</div>
+<div id="project-url-bar" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <span style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap;">Projet Claude :</span>
+  <input type="text" id="project-url-input" placeholder="Colle ici l'URL de ton projet Face caméra (claude.ai/project/...)" style="flex:1;min-width:200px;font-size:12px;" oninput="saveProjectUrl()" value="">
+  <span id="project-url-status" style="font-size:11px;color:#639922;display:none;">✓ Lié</span>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('today',this)">Aujourd'hui</button>
+  <button class="tab" onclick="showTab('prep',this)">Préparation</button>
+  <button class="tab" onclick="showTab('script',this)">Script</button>
+  <button class="tab" onclick="showTab('log',this)">Publié</button>
+  <button class="tab" id="tab-analyse" onclick="showTab('analyse',this)">Analyse</button>
+  <button class="tab" onclick="showTab('comments',this)">Commentaires</button>
+  <button class="tab" onclick="showTab('veille',this)">Veille</button>
+  <button class="tab" onclick="showTab('claude',this)">Question à Claude</button>
+  <button class="tab" onclick="showTab('pool',this)">Pool</button>
+  <button class="tab" onclick="showTab('actions',this)">Actions</button>
+</div>
+
+<div id="today" class="section active">
+  <div id="today-date" style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.5rem;"></div>
+  <div id="ratio-display" style="margin-bottom:1rem;"></div>
+  <div id="daily-ideas-container"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="refreshDaily()">Nouvelles idées</button>
+    <button class="btn" onclick="generateAI()">Générer via IA ↗</button>
+  </div>
+  <p class="note-info" style="margin-top:1rem;">Les boutons "↗" ouvrent Claude.ai pour continuer la conversation.</p>
+</div>
+
+<div id="prep" class="section">
+  <div id="prep-list"></div>
+  <div class="card">
+    <div class="card-title">Ajouter depuis le pool</div>
+    <div class="field-row">
+      <select id="prep-select" style="flex:1;"></select>
+      <button class="btn btn-primary" onclick="addToPrep()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<div id="script" class="section">
+  <div id="script-toast" class="toast toast-success"></div>
+  <div class="card">
+    <div class="card-title">Atelier script</div>
+    <div class="field-row"><label>Hook</label><input type="text" id="script-hook" style="flex:1" placeholder="L'idée principale..." oninput="autosaveScript()"></div>
+    <div class="field-row">
+      <label>Format</label>
+      <select id="script-format" onchange="autosaveScript()"><option>Reel</option><option>Carrousel</option><option>Photo</option></select>
+      <select id="script-type" style="margin-left:6px;" onchange="autosaveScript()"><option value="c">Curiosité</option><option value="conf">Confiance</option><option value="conv">Conversion</option></select>
+    </div>
+    <textarea id="script-raw" style="min-height:120px;margin-bottom:0.75rem;" placeholder="Ton texte brut, même décousu..." oninput="autosaveScript()"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="retravaillerScript()">Retravailler en script ↗</button>
+      <button class="btn btn-primary" onclick="saveScriptToPrep()">Sauvegarder → Préparation</button>
+    </div>
+    <div id="script-autosave-status" style="font-size:12px;color:var(--color-text-tertiary);margin-top:8px;font-style:italic;"></div>
+  </div>
+  <div id="saved-scripts"></div>
+</div>
+
+<div id="log" class="section">
+  <div class="card">
+    <div class="card-title">Enregistrer une publication</div>
+    <div class="field-row"><label>Hook</label><input type="text" id="log-hook" style="flex:1" placeholder="Phrase d'accroche ou description du contenu..."></div>
+    <div class="field-row">
+      <label>Format</label>
+      <select id="log-format"><option>Reel</option><option>Carrousel</option><option>Photo</option><option>Story</option></select>
+    </div>
+    <div id="log-classif-zone" style="margin-bottom:0.75rem;">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <span style="font-size:13px;color:var(--color-text-secondary);">Catégorie</span>
+        <span id="log-type-display" style="font-size:13px;color:var(--color-text-tertiary);font-style:italic;">— non définie</span>
+        <button class="mini-btn" onclick="autoClassifyLog()" style="font-size:12px;">Détecter automatiquement</button>
+      </div>
+      <input type="hidden" id="log-type" value="c">
+      <div id="log-classif-result" style="margin-top:6px;"></div>
+    </div>
+    <div class="field-row" style="flex-wrap:wrap;gap:10px;">
+      <span style="font-size:13px;color:var(--color-text-secondary);">Vues</span><input type="number" id="log-views" style="width:75px" placeholder="0">
+      <span style="font-size:13px;color:var(--color-text-secondary);">Saves</span><input type="number" id="log-saves" style="width:65px" placeholder="0">
+      <span style="font-size:13px;color:var(--color-text-secondary);">Partages</span><input type="number" id="log-shares" style="width:65px" placeholder="0">
+      <span style="font-size:13px;color:var(--color-text-secondary);">Comm.</span><input type="number" id="log-comments" style="width:65px" placeholder="0">
+      <span style="font-size:13px;color:var(--color-text-secondary);">DM</span><input type="number" id="log-dms" style="width:65px" placeholder="0">
+      <span style="font-size:13px;color:var(--color-text-secondary);">Abonnés gagnés</span><input type="number" id="log-followers" style="width:80px" placeholder="0">
+    </div>
+    <textarea id="log-note" style="min-height:50px;margin-bottom:0.75rem;" placeholder="Note..."></textarea>
+    <button class="btn btn-primary" onclick="addPub()">Enregistrer</button>
+  </div>
+  <div id="pub-list"></div>
+</div>
+
+<div id="analyse" class="section">
+  <div id="analyse-alerts"></div>
+  <div class="card">
+    <div class="card-title">Analyser les statistiques d'une vidéo</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem;">Uploade jusqu'à 10 screens pour une analyse complète — portée, interactions, audience, tout.</div>
+    <div class="upload-zone" onclick="document.getElementById('screen-upload').click()" id="upload-drop-zone">
+      <input type="file" id="screen-upload" accept="image/*" multiple onchange="handleMultiScreenUpload(event)">
+      <div style="font-size:22px;color:var(--color-text-tertiary);margin-bottom:8px;">+</div>
+      <div style="font-size:13px;color:var(--color-text-secondary);">Clique ou glisse tes screens ici</div>
+      <div style="font-size:12px;color:var(--color-text-tertiary);margin-top:4px;">Jusqu'à 10 images — analyse combinée automatique</div>
+    </div>
+    <div id="multi-screen-previews" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:0.75rem;"></div>
+    <div id="multi-screen-count" style="font-size:12px;color:var(--color-text-secondary);margin-bottom:0.75rem;display:none;"></div>
+    <div id="screen-analyse-btn-zone" style="display:none;margin-bottom:0.75rem;">
+      <button class="btn btn-primary" onclick="analyzeAllScreens()">Analyser les <span id="screen-count-label">0</span> screens ↗</button>
+      <button class="btn" onclick="clearScreens()" style="margin-left:8px;">Tout effacer</button>
+    </div>
+    <div id="screen-ai-output"></div>
+  </div>
+  <div class="metric-grid" id="analyse-metrics"></div>
+  <div id="analyse-content"></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="runAnalysis()">Analyse globale et nouvelles idées ↗</button></div>
+  <div id="screen-history-zone"></div>
+</div>
+
+<div id="comments" class="section">
+  <div class="card">
+    <div class="card-title">Analyser des commentaires</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem;">Uploade un screen — 2 propositions de réponse par commentaire dans ton ton.</div>
+    <div class="upload-zone" onclick="document.getElementById('comment-upload').click()">
+      <input type="file" id="comment-upload" accept="image/*" onchange="handleCommentUpload(event)">
+      <div style="font-size:13px;color:var(--color-text-secondary);">Screen de commentaires Instagram</div>
+    </div>
+    <div id="comment-preview"></div>
+    <div id="comment-output"></div>
+  </div>
+  <div id="comment-history"></div>
+</div>
+
+<div id="veille" class="section">
+  <div class="card">
+    <div class="card-title">Comptes à surveiller</div>
+    <div id="veille-accounts-list" class="veille-accounts"></div>
+    <div class="field-row">
+      <input type="text" id="veille-account-input" style="flex:1" placeholder="@compte ou thématique...">
+      <button class="btn" onclick="addVeilleAccount()">Ajouter</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Lancer une veille</div>
+    <div class="field-row">
+      <label>Thématique</label>
+      <select id="veille-theme" style="flex:1;">
+        <option value="presence camera">Présence caméra</option>
+        <option value="confiance femmes entrepreneuses">Confiance femmes entrepreneuses</option>
+        <option value="communication video entrepreneur">Communication vidéo entrepreneur</option>
+        <option value="voix posture corps">Voix posture corps</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label>Objectif</label>
+      <select id="veille-goal" style="flex:1;">
+        <option value="hooks">Extraire des hooks percutants</option>
+        <option value="formats">Identifier les formats qui percent</option>
+        <option value="idees">Générer des idées adaptées</option>
+        <option value="tout">Tout — hooks + formats + idées</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="lancerVeille()">Lancer la veille ↗</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Analyser un contenu repéré</div>
+    <textarea id="veille-content-input" style="min-height:80px;margin-bottom:0.75rem;" placeholder="Ex: J'ai vu un Reel de @compte qui commence par '...' — 500k vues..."></textarea>
+    <button class="btn btn-primary" onclick="analyzeVeilleContent()">Adapter à @juste_stre ↗</button>
+  </div>
+</div>
+
+<div id="claude" class="section">
+  <div class="card">
+    <div class="card-title">Question à Claude</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;">Questions sur ta stratégie, suggestions d'amélioration, retour sur un contenu.</div>
+    <div id="claude-chat-history" class="claude-chat"></div>
+    <textarea id="claude-question" style="min-height:60px;margin:1rem 0 0.5rem;" placeholder="Ta question ou suggestion..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="sendClaudeQuestion()">Envoyer ↗</button>
+      <button class="btn" onclick="clearChat()">Effacer</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Questions rapides</div>
+    <div class="btn-row" style="flex-direction:column;align-items:flex-start;">
+      <button class="mini-btn" onclick="quickQuestion('Comment améliorer mon ratio 3C en ce moment ?')">Comment améliorer mon ratio 3C ? ↗</button>
+      <button class="mini-btn" onclick="quickQuestion('Quel type de hook devrait mieux marcher pour moi ce mois-ci ?')">Quel hook devrait mieux marcher ? ↗</button>
+      <button class="mini-btn" onclick="quickQuestion('Analyse mon pool d\'idées et dis-moi ce qui manque.')">Ce qui manque dans mon pool ↗</button>
+      <button class="mini-btn" onclick="quickQuestion('Donne-moi 3 idées de série de contenu pour @juste_stre sur les 30 prochains jours.')">Idées de série 30 jours ↗</button>
+    </div>
+  </div>
+</div>
+
+<div id="pool" class="section">
+  <div class="card">
+    <div class="card-title">Ajouter une idée — catégorisation automatique</div>
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:0.75rem;">Décris ton idée librement — je la catégorise et reformule automatiquement.</div>
+    <textarea id="pool-free-input" style="min-height:70px;margin-bottom:0.75rem;" placeholder="Ex : j'ai envie de parler du moment où on se voit à l'écran pour la première fois et qu'on déteste ce qu'on voit..."></textarea>
+    <div class="field-row">
+      <label>Format</label>
+      <select id="pool-format-auto"><option>Reel</option><option>Carrousel</option><option>Photo</option></select>
+    </div>
+    <button class="btn btn-primary" onclick="autoClassifyIdea()">Catégoriser et ajouter ↗</button>
+    <div id="classif-result"></div>
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:0.5px solid var(--color-border-tertiary);">
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem;">Ou ajouter manuellement</div>
+      <div class="field-row"><input type="text" id="pool-hook" style="flex:1" placeholder="Hook en une phrase..."></div>
+      <div class="field-row">
+        <select id="pool-format"><option>Reel</option><option>Carrousel</option><option>Photo</option></select>
+        <select id="pool-type" style="margin-left:6px;"><option value="c">Curiosité</option><option value="conf">Confiance</option><option value="conv">Conversion</option></select>
+        <button class="btn btn-primary" style="margin-left:6px;" onclick="addToPool()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+  <div id="pool-list"></div>
+</div>
+
+<div id="actions" class="section">
+  <div class="card">
+    <div class="card-title">Chantiers en cours</div>
+    <div id="checklist-container"></div>
+  </div>
+  <div class="card">
+    <div class="field-row">
+      <input type="text" id="new-task" style="flex:1" placeholder="Nouvelle tâche...">
+      <button class="btn" onclick="addTask()">Ajouter</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const K={pool:'stre_pool3',pubs:'stre_pubs3',daily:'stre_daily3',prep:'stre_prep3',scripts:'stre_scripts3',tasks:'stre_tasks3',screens:'stre_screens4',pending:'stre_pending4',comments:'stre_comments5',veilleAcc:'stre_veilleacc5',chat:'stre_chat5'};
+const DEFAULT_POOL=[
+  {id:1,hook:"Tu te filmes depuis 6 mois. Tes vidéos ne sortent jamais.",format:"Reel",type:"c",used:false},
+  {id:2,hook:"La caméra ne ment pas. C'est ça qui fait peur.",format:"Reel",type:"c",used:false},
+  {id:3,hook:"3 choses que ton corps fait face à la caméra",format:"Carrousel",type:"conf",used:false},
+  {id:4,hook:"Ce n'est pas ta voix qui est trop aiguë. C'est ta gorge qui se serre.",format:"Reel",type:"c",used:false},
+  {id:5,hook:"J'ai filmé une femme qui voulait se cacher. En 2h, elle ne voulait plus partir.",format:"Reel",type:"conv",used:false},
+  {id:6,hook:"Ce que ton regard dit quand tu regardes l'objectif.",format:"Carrousel",type:"conf",used:false},
+  {id:7,hook:"Ton corps savait avant toi que quelque chose bloquait.",format:"Reel",type:"c",used:false},
+  {id:8,hook:"Avant/après : une session Face caméra en 2h",format:"Reel",type:"conv",used:false},
+  {id:9,hook:"Ce que j'ai compris en me filmant pour la première fois",format:"Reel",type:"conf",used:false},
+  {id:10,hook:"3 erreurs de posture qui font fuir l'attention",format:"Carrousel",type:"conf",used:false},
+  {id:11,hook:"Tu n'as pas besoin d'être à l'aise. Tu as besoin d'être ancrée.",format:"Reel",type:"c",used:false},
+  {id:12,hook:"Pourquoi tu parles différemment face à la caméra",format:"Reel",type:"c",used:false},
+  {id:13,hook:"Ce que mes clientes apprennent en session",format:"Carrousel",type:"conv",used:false},
+  {id:14,hook:"La posture qui change tout avant d'appuyer sur record",format:"Reel",type:"conf",used:false},
+  {id:15,hook:"Non, tu n'as pas besoin d'un meilleur micro.",format:"Reel",type:"c",used:false},
+  {id:16,hook:"Ce que ton souffle dit de ta confiance face à l'objectif",format:"Reel",type:"conf",used:false},
+  {id:17,hook:"Les 3 questions que mes clientes me posent avant leur première session",format:"Carrousel",type:"conv",used:false},
+  {id:18,hook:"Tu te caches derrière ton téléphone. Ton audience le sent.",format:"Reel",type:"c",used:false}
+];
+const DEFAULT_TASKS=[
+  {id:1,text:"Poster les 6 Reels \"Ton corps savait\"",done:false},
+  {id:2,text:"Finaliser le poster Canva Face caméra",done:false},
+  {id:3,text:"Activer le lien Calendly sur @juste_stre",done:false},
+  {id:4,text:"Envoyer sondage post-session aux clientes test",done:false},
+  {id:5,text:"Activer le lien coaching dans Linktree",done:false},
+  {id:6,text:"Lead magnet guide 12 patterns — distribution prête",done:true}
+];
+function ls(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function getPool(){return ls(K.pool)||JSON.parse(JSON.stringify(DEFAULT_POOL));}
+function savePool(p){ss(K.pool,p);}
+function getPubs(){return ls(K.pubs)||[];}
+function savePubs(p){ss(K.pubs,p);}
+function getDaily(){return ls(K.daily)||{date:'',ideas:[]};}
+function saveDaily(d){ss(K.daily,d);}
+function getPrep(){return ls(K.prep)||[];}
+function savePrep(p){ss(K.prep,p);}
+function getScripts(){return ls(K.scripts)||[];}
+function saveScripts(s){ss(K.scripts,s);}
+function getTasks(){return ls(K.tasks)||JSON.parse(JSON.stringify(DEFAULT_TASKS));}
+function saveTasks(t){ss(K.tasks,t);}
+function getScreens(){return ls(K.screens)||[];}
+function saveScreens(s){ss(K.screens,s);}
+function getPending(){return ls(K.pending)||[];}
+function savePending(p){ss(K.pending,p);}
+function getComments(){return ls(K.comments)||[];}
+function saveComments(c){ss(K.comments,c);}
+function getVeilleAccounts(){return ls(K.veilleAcc)||[];}
+function saveVeilleAccounts(a){ss(K.veilleAcc,a);}
+function getChat(){return ls(K.chat)||[];}
+function saveChat(c){ss(K.chat,c);}
+function tLabel(t){return t==='c'?'Curiosité':t==='conf'?'Confiance':'Conversion';}
+function tClass(t){return 'tag tag-'+t;}
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function daysDiff(d){return Math.floor((Date.now()-new Date(d).getTime())/(864e5));}
+function calcScore(p){const v=p.views||0;if(!v)return 0;return Math.min(100,Math.round(((p.saves||0)*3+(p.shares||0)*3+(p.comments||0)*2+(p.dms||0)*4)/v*2000));}
+function calcGrowthScore(p){const v=p.views||0;if(!v||!p.followers)return 0;return Math.min(100,Math.round((p.followers/v)*10000));}
+function growthLabel(s){
+  if(s>=50)return '<span class="score-badge score-high">Croissance forte</span>';
+  if(s>=15)return '<span class="score-badge score-mid">Croissance moyenne</span>';
+  if(s>0)return '<span class="score-badge score-low">Croissance faible</span>';
+  return '';
+}
+function scoreLabel(s){if(s>=70)return '<span class="score-badge score-high">Fort</span>';if(s>=40)return '<span class="score-badge score-mid">Moyen</span>';if(s>0)return '<span class="score-badge score-low">Faible</span>';return '<span class="score-badge score-na">—</span>';}
+function computeIdealRatio(pubs){
+  if(!pubs.length)return{c:3,conf:1,conv:1};
+  const c={c:0,conf:0,conv:0};pubs.forEach(p=>{c[p.type]=(c[p.type]||0)+1;});
+  const t=pubs.length,id={c:.5,conf:.3,conv:.2};
+  const n={c:Math.max(0,id.c-c.c/t),conf:Math.max(0,id.conf-c.conf/t),conv:Math.max(0,id.conv-c.conv/t)};
+  const s=n.c+n.conf+n.conv||1;
+  const p={c:Math.max(1,Math.round(5*n.c/s)),conf:Math.max(1,Math.round(5*n.conf/s)),conv:Math.max(1,Math.round(5*n.conv/s))};
+  while(p.c+p.conf+p.conv<5){const r={c:c.c/t,conf:c.conf/t,conv:c.conv/t};if(r.c<=r.conf&&r.c<=r.conv)p.c++;else if(r.conf<=r.conv)p.conf++;else p.conv++;}
+  while(p.c+p.conf+p.conv>5){if(p.c>=p.conf&&p.c>=p.conv&&p.c>1)p.c--;else if(p.conf>=p.conv&&p.conf>1)p.conf--;else if(p.conv>1)p.conv--;else break;}
+  return p;
+}
+function pickIdeasByRatio(pool,ratio){
+  const picked=[];
+  ['c','conf','conv'].forEach(t=>{const av=pool.filter(i=>!i.used&&i.type===t&&!picked.find(p=>p.id===i.id));for(let i=0;i<(ratio[t]||0)&&i<av.length;i++)picked.push(av[i]);});
+  while(picked.length<5){const av=pool.filter(i=>!i.used&&!picked.find(p=>p.id===i.id));if(!av.length)break;picked.push(av[0]);}
+  return picked.slice(0,5);
+}
+function updateAnalyseBadge(){
+  const pending=getPending().filter(p=>daysDiff(p.publishedAt)>=2);
+  const tab=document.getElementById('tab-analyse');
+  const ex=tab.querySelector('.tab-badge');if(ex)ex.remove();
+  if(pending.length){const b=document.createElement('span');b.className='tab-badge';b.textContent=pending.length;tab.appendChild(b);}
+}
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(el&&el.classList)el.classList.add('active');
+  if(id==='log')renderPubs();
+  if(id==='analyse')renderAnalyse();
+  if(id==='pool')renderPool();
+  if(id==='prep')renderPrep();
+  if(id==='script')renderScripts();
+  if(id==='actions')renderTasks();
+  if(id==='comments')renderCommentHistory();
+  if(id==='veille')renderVeilleAccounts();
+  if(id==='claude')renderChat();
+}
+function saveProjectUrl(){
+  const val=document.getElementById('project-url-input').value.trim();
+  localStorage.setItem('stre_project_url',val);
+  const status=document.getElementById('project-url-status');
+  if(val){status.style.display='inline';setTimeout(()=>{status.style.display='none';},2000);}
+}
+function getProjectUrl(){
+  return localStorage.getItem('stre_project_url')||'';
+}
+function showCopyToast(msg){
+  const t=document.createElement('div');
+  t.innerHTML=msg;
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#26215C;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:9999;max-width:320px;text-align:center;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),4000);
+}
+
+function openClaude(prompt){
+  const projectUrl=getProjectUrl();
+  if(projectUrl){
+    // Copier le prompt dans le presse-papier
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(prompt).then(()=>{
+        window.open(projectUrl,'_blank');
+        showCopyToast('Prompt copié ✓<br><span style="font-size:11px;opacity:0.8;">Ouvre le projet → colle avec Cmd+V / Ctrl+V</span>');
+      }).catch(()=>{
+        // Fallback si clipboard échoue
+        window.open(projectUrl,'_blank');
+        showCopyToast('Projet ouvert — copie le prompt manuellement');
+      });
+    } else {
+      window.open(projectUrl,'_blank');
+    }
+  } else {
+    const encoded=encodeURIComponent(prompt);
+    window.open('https://claude.ai/new?q='+encoded,'_blank');
+  }
+}
+function sendPrompt(p){openClaude(p);}
+function renderRatioDisplay(pubs,ratio){
+  const t=pubs.length||1,c={c:0,conf:0,conv:0};pubs.forEach(p=>{c[p.type]=(c[p.type]||0)+1;});
+  const pC=Math.round(c.c/t*100),pConf=Math.round(c.conf/t*100),pConv=Math.round(100-pC-pConf);
+  document.getElementById('ratio-display').innerHTML=`<div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">Propositions du jour : <strong style="color:var(--color-text-primary);">${ratio.c} curiosité · ${ratio.conf} confiance · ${ratio.conv} conversion</strong></div><div class="ratio-bar"><div class="rb-c" style="width:${pC}%"></div><div class="rb-conf" style="width:${pConf}%"></div><div class="rb-conv" style="width:${pConv}%"></div></div><div class="ratio-legend"><span><span class="rl-dot" style="background:#378ADD;"></span>Curiosité ${pC}%</span><span><span class="rl-dot" style="background:#639922;"></span>Confiance ${pConf}%</span><span><span class="rl-dot" style="background:#BA7517;"></span>Conversion ${pConv}%</span></div>`;
+}
+function renderToday(){
+  const d=new Date();document.getElementById('today-date').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  const pubs=getPubs(),ratio=computeIdealRatio(pubs);renderRatioDisplay(pubs,ratio);
+  const pool=getPool(),daily=getDaily();let ideas=[];
+  if(daily.date===todayStr()&&daily.ideas.length>=5)ideas=daily.ideas.map(id=>pool.find(i=>i.id===id)).filter(Boolean);
+  if(ideas.length<5){ideas=pickIdeasByRatio(pool,ratio);saveDaily({date:todayStr(),ideas:ideas.map(i=>i.id)});}
+  const container=document.getElementById('daily-ideas-container');
+  if(!ideas.length){container.innerHTML='<div class="empty-state">Pool épuisé — génère de nouvelles idées via IA.</div>';return;}
+  container.innerHTML=ideas.map(idea=>`<div class="idea-card"><div class="idea-hook">${idea.hook}</div><div class="idea-meta"><span class="${tClass(idea.type)}">${tLabel(idea.type)}</span> · ${idea.format}</div><div class="idea-actions"><button class="mini-btn" onclick="markPublished(${idea.id})">Publié</button><button class="mini-btn mini-btn-accent" onclick="sendToPrep(${idea.id})">En préparation</button><button class="mini-btn" onclick="skipIdea(${idea.id})">Passer</button><button class="mini-btn" onclick="scriptIdea(${idea.id})">Scripter ↗</button></div></div>`).join('');
+  updateAnalyseBadge();
+}
+function refreshDaily(){const r=computeIdealRatio(getPubs());const i=pickIdeasByRatio(getPool(),r);saveDaily({date:todayStr(),ideas:i.map(x=>x.id)});renderToday();}
+function generateAI(){
+  const pubs=getPubs(),ratio=computeIdealRatio(pubs);
+  const top=pubs.length?pubs.slice().sort((a,b)=>calcScore(b)-calcScore(a)).slice(0,3).map(p=>`"${p.hook}" → score ${calcScore(p)}, ${p.dms||0} DM`).join('\n'):'Aucune encore.';
+  sendPrompt(`Je suis Stré (@juste_stre), j'accompagne des femmes entrepreneuses à être présentes face caméra — corps, voix, posture.\n\nMeilleurs hooks :\n${top}\n\nMon style : ancrage corporel, affirmations tranchées, "tu", jamais de clichés coaching.\n\nGénère 5 idées : ${ratio.c} Curiosité · ${ratio.conf} Confiance · ${ratio.conv} Conversion. Hook 1 phrase corps en premier, format, type.`);
+}
+function skipIdea(id){
+  const daily=getDaily();daily.ideas=daily.ideas.filter(i=>i!==id);
+  const pool=getPool(),sk=pool.find(i=>i.id===id);
+  const av=pool.filter(i=>!i.used&&!daily.ideas.includes(i.id)&&i.id!==id&&(!sk||i.type===sk.type));
+  const fb=av.length?av:pool.filter(i=>!i.used&&!daily.ideas.includes(i.id)&&i.id!==id);
+  if(fb.length)daily.ideas.push(fb[0].id);
+  saveDaily(daily);renderToday();
+}
+function markPublished(id){
+  const pool=getPool(),idea=pool.find(i=>i.id===id);if(idea)idea.used=true;savePool(pool);
+  const daily=getDaily();daily.ideas=daily.ideas.filter(i=>i!==id);saveDaily(daily);
+  const pending=getPending();pending.push({id,hook:idea?idea.hook:'',type:idea?idea.type:'c',format:idea?idea.format:'Reel',publishedAt:todayStr()});savePending(pending);
+  updateAnalyseBadge();
+  document.querySelectorAll('.tab')[3].click();
+  if(idea){document.getElementById('log-hook').value=idea.hook;document.getElementById('log-format').value=idea.format;document.getElementById('log-type').value=idea.type;}
+}
+function sendToPrep(id){
+  const pool=getPool(),idea=pool.find(i=>i.id===id);if(!idea)return;
+  const prep=getPrep();if(!prep.find(p=>p.id===id)){prep.push({...idea,raw:r,addedAt:todayStr()});savePrep(prep);}
+  const daily=getDaily();daily.ideas=daily.ideas.filter(i=>i!==id);saveDaily(daily);renderToday();
+}
+function scriptIdea(id){
+  // Chercher d'abord dans prep (contient le raw), puis dans le pool
+  const prep=getPrep();
+  const fromPrep=prep.find(p=>p.id===id);
+  const fromPool=getPool().find(i=>i.id===id);
+  const idea=fromPrep||fromPool;
+  if(!idea)return;
+  const hook=idea.hook||'';
+  const format=idea.format||'Reel';
+  const type=idea.type||'c';
+  const raw=idea.raw||'';
+  const scripts=getScripts();
+  const fromScript=scripts.find(s=>s.id===id);
+  const scriptContent=fromScript?fromScript.raw:raw;
+  let prompt=`Tu es le rédacteur créatif de @juste_stre (Face caméra — accompagnement corps, voix, posture, présence caméra pour femmes entrepreneuses).\n\nContexte du contenu à scripter :\n- Hook : "${hook}"\n- Format : ${format}\n- Pilier : ${tLabel(type)}\n`;
+  if(scriptContent){
+    prompt+=`\nTexte brut / notes de Stré :\n${scriptContent}\n\nRetravaille ce texte en script vidéo complet prêt à tourner.`;
+  } else {
+    prompt+=`\nÉcris un script vidéo complet à partir de ce hook.`;
+  }
+  prompt+=`\n\nStructure obligatoire :\n1. HOOK (3-5 secondes à l'oral) : accroche corporelle, affirmation tranchée, jamais de question rhétorique banale\n2. CORPS : développement en phrases courtes, ancrage dans les sensations physiques (gorge, souffle, regard, posture), "tu" direct\n3. FIN : affirmation forte ou invitation douce — jamais de CTA commercial\n\nContraintes :\n- Reel : 30 secondes max à l'oral\n- Ton direct, chaleureux, registre parlé pas écrit\n- Jamais : "se sentir bien", "bienveillance", "zone de confort", clichés de coaching\n- Toujours : corps en premier, vérité qui dérange, image concrète et viscérale`;
+  sendPrompt(prompt);
+}
+function renderPrep(){
+  const prep=getPrep(),pool=getPool();
+  const el=document.getElementById('prep-list');
+  el.innerHTML=prep.length?prep.map(idea=>`<div class="prep-card"><div class="prep-hook">${idea.hook}</div><div class="prep-meta"><span class="tag tag-prep">${tLabel(idea.type)}</span> · ${idea.format}${idea.fromScript?' · depuis atelier script':''} · ${idea.addedAt||''}</div>${idea.raw?`<div style="font-size:12px;color:#534AB7;font-style:italic;margin:6px 0;padding:8px;background:rgba(127,119,221,0.1);border-radius:6px;line-height:1.5;white-space:pre-wrap;">${idea.raw.substring(0,300)}${idea.raw.length>300?'...':''}</div>`:''}<div class="idea-actions"><button class="mini-btn" onclick="prepToScript(${idea.id},'${encodeURIComponent(idea.hook)}','${idea.format}','${idea.type}','${encodeURIComponent(idea.raw||'')}')">Ouvrir dans script</button><button class="mini-btn" onclick="prepPublished(${idea.id})">Publié</button><button class="mini-btn" onclick="removePrep(${idea.id})">Retirer</button><button class="mini-btn" onclick="scriptIdea(${idea.id})">Scripter ↗</button></div></div>`).join(''):'<div class="empty-state">Aucune idée en préparation.</div>';
+  const avail=pool.filter(i=>!i.used&&!prep.find(p=>p.id===i.id));
+  const sel=document.getElementById('prep-select');
+  if(sel)sel.innerHTML=avail.length?avail.map(i=>`<option value="${i.id}">${i.hook.substring(0,50)}... (${tLabel(i.type)})</option>`).join(''):'<option>Pool vide</option>';
+}
+function prepToScript(id,h,f,t,r){
+  _currentScriptPrepId=id;
+  document.querySelectorAll('.tab')[2].click();
+  setTimeout(()=>{
+    document.getElementById('script-hook').value=decodeURIComponent(h);
+    document.getElementById('script-format').value=f;
+    document.getElementById('script-type').value=t;
+    document.getElementById('script-raw').value=r?decodeURIComponent(r):'';
+    const status=document.getElementById('script-autosave-status');
+    if(status)status.textContent='Brouillon lié à la préparation — modifications sauvegardées automatiquement.';
+  },50);
+}
+function prepPublished(id){
+  removePrep(id);const pool=getPool(),idea=pool.find(i=>i.id===id);
+  if(idea){idea.used=true;savePool(pool);}
+  const pending=getPending();if(!pending.find(p=>p.id===id)){pending.push({id,hook:idea?idea.hook:'',type:idea?idea.type:'c',format:idea?idea.format:'Reel',publishedAt:todayStr()});savePending(pending);}
+  updateAnalyseBadge();document.querySelectorAll('.tab')[3].click();
+  if(idea){document.getElementById('log-hook').value=idea.hook;document.getElementById('log-format').value=idea.format;document.getElementById('log-type').value=idea.type;}
+}
+function removePrep(id){savePrep(getPrep().filter(p=>p.id!==id));renderPrep();}
+function addToPrep(){const sel=document.getElementById('prep-select');if(!sel||!sel.value)return;const id=parseInt(sel.value);const idea=getPool().find(i=>i.id===id);if(!idea)return;const prep=getPrep();if(!prep.find(p=>p.id===id)){prep.push({...idea,addedAt:todayStr()});savePrep(prep);}renderPrep();}
+function retravaillerScript(){
+  const h=document.getElementById('script-hook').value.trim(),r=document.getElementById('script-raw').value.trim();if(!r)return;
+  sendPrompt(`Texte brut @juste_stre :\nHook : "${h||'à définir'}" · ${document.getElementById('script-format').value} · ${tLabel(document.getElementById('script-type').value)}\n\n${r}\n\nRetravaille en script vidéo : hook corpo 3-5s → corps phrases courtes → affirmation finale. "tu", jamais de clichés. Reel : 30s max.`);
+}
+let _autosaveTimer=null;
+let _currentScriptPrepId=null;
+
+function autosaveScript(){
+  clearTimeout(_autosaveTimer);
+  _autosaveTimer=setTimeout(()=>{
+    const h=document.getElementById('script-hook').value.trim();
+    const f=document.getElementById('script-format').value;
+    const t=document.getElementById('script-type').value;
+    const r=document.getElementById('script-raw').value;
+    if(!h&&!r)return;
+    const status=document.getElementById('script-autosave-status');
+    if(_currentScriptPrepId){
+      const prep=getPrep();
+      const item=prep.find(p=>p.id===_currentScriptPrepId);
+      if(item){
+        if(h)item.hook=h;
+        item.format=f;item.type=t;item.raw=r;
+        savePrep(prep);
+        const sc=getScripts();
+        const scItem=sc.find(s=>s.id===_currentScriptPrepId);
+        if(scItem){if(h)scItem.hook=h;scItem.format=f;scItem.type=t;scItem.raw=r;saveScripts(sc);}
+        if(status)status.textContent='Brouillon mis à jour automatiquement — '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+        return;
+      }
+    }
+    if(status)status.textContent='';
+  },800);
+}
+
+function saveScriptToPrep(){
+  const h=document.getElementById('script-hook').value.trim();if(!h)return;
+  const f=document.getElementById('script-format').value,t=document.getElementById('script-type').value,r=document.getElementById('script-raw').value;
+  const id=_currentScriptPrepId||Date.now();
+  const pool=getPool();
+  const poolItem=pool.find(p=>p.id===id);
+  if(!poolItem)pool.push({id,hook:h,format:f,type:t,used:false,fromScript:true});
+  else{poolItem.hook=h;poolItem.format=f;poolItem.type=t;}
+  savePool(pool);
+  const sc=getScripts();
+  const scItem=sc.find(s=>s.id===id);
+  if(scItem){scItem.hook=h;scItem.format=f;scItem.type=t;scItem.raw=r;}
+  else sc.unshift({id,hook:h,format:f,type:t,raw:r,date:todayStr()});
+  saveScripts(sc);
+  const prep=getPrep();
+  const prepItem=prep.find(p=>p.id===id);
+  if(prepItem){prepItem.hook=h;prepItem.format=f;prepItem.type=t;prepItem.raw=r;}
+  else prep.push({id,hook:h,format:f,type:t,used:false,fromScript:true,raw:r,addedAt:todayStr()});
+  savePrep(prep);
+  _currentScriptPrepId=null;
+  document.getElementById('script-hook').value='';
+  document.getElementById('script-raw').value='';
+  const status=document.getElementById('script-autosave-status');
+  if(status)status.textContent='';
+  const toast=document.getElementById('script-toast');toast.textContent='Sauvegardé → En préparation.';toast.style.display='block';setTimeout(()=>{toast.style.display='none';},3000);
+  renderScripts();
+}
+function renderScripts(){
+  const sc=getScripts(),el=document.getElementById('saved-scripts');
+  el.innerHTML=sc.length?'<div class="card"><div class="card-title">Scripts ('+sc.length+')</div>'+sc.map(s=>`<div class="pub-row"><div class="pub-info"><div class="pub-title">${s.hook}</div><div class="pub-meta"><span class="${tClass(s.type)}">${tLabel(s.type)}</span> · ${s.format} · ${s.date}</div></div><button class="del-btn" onclick="deleteScript(${s.id})">Supp.</button></div>`).join('')+'</div>':'';
+}
+function deleteScript(id){saveScripts(getScripts().filter(s=>s.id!==id));savePool(getPool().filter(p=>p.id!==id));savePrep(getPrep().filter(p=>p.id!==id));renderScripts();}
+function autoClassifyLog(){
+  var hook=document.getElementById('log-hook').value.trim();
+  if(!hook){
+    document.getElementById('log-classif-result').innerHTML='<span style="font-size:12px;color:#E24B4A;">Écris d\'abord le hook ou une description.</span>';
+    return;
+  }
+  var format=document.getElementById('log-format').value;
+  var resultEl=document.getElementById('log-classif-result');
+  resultEl.innerHTML='<span style="font-size:12px;color:var(--color-text-tertiary);font-style:italic;">Détection en cours...</span>';
+  var prompt='Tu catégorises des publications Instagram pour @juste_stre (Face caméra — corps, voix, posture, présence caméra pour femmes entrepreneuses).\n\nDéfinitions :\n- Curiosité (c) : stoppe le scroll, vérité qui dérange, paradoxe, image forte\n- Confiance (conf) : micro-enseignement corporel, méthode, valeur gratuite\n- Conversion (conv) : avant/après, témoignage, présentation de l\'offre via le vécu\n\nContenu : "'+hook+'" (format : '+format+')\n\nRéponds en JSON sans markdown : {"type":"c|conf|conv","raison":"1 phrase courte"}';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:200,messages:[{role:'user',content:prompt}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var text=data.content&&data.content[0]?data.content[0].text:'';
+    var parsed;
+    try{parsed=JSON.parse(text.replace(/```json|```/g,'').trim());}catch(e){parsed=null;}
+    if(parsed&&parsed.type){
+      var t=parsed.type;
+      document.getElementById('log-type').value=t;
+      document.getElementById('log-type-display').innerHTML='<span class="tag tag-'+t+'" style="margin:0;">'+tLabel(t)+'</span>';
+      resultEl.innerHTML='<div style="font-size:12px;color:var(--color-text-secondary);font-style:italic;">'+(parsed.raison||'')+'</div><div style="display:flex;gap:6px;margin-top:4px;"><button onclick="setLogType(\'c\')" class="mini-btn">Curiosité</button><button onclick="setLogType(\'conf\')" class="mini-btn">Confiance</button><button onclick="setLogType(\'conv\')" class="mini-btn">Conversion</button></div>';
+    } else {
+      resultEl.innerHTML='<span style="font-size:12px;color:#E24B4A;">Erreur — choisis manuellement.</span>';
+      showManualTypePicker();
+    }
+  }).catch(function(){
+    resultEl.innerHTML='<span style="font-size:12px;color:#E24B4A;">Erreur réseau.</span>';
+    showManualTypePicker();
+  });
+}
+
+function setLogType(t){
+  document.getElementById('log-type').value=t;
+  document.getElementById('log-type-display').innerHTML='<span class="tag tag-'+t+'" style="margin:0;">'+tLabel(t)+'</span>';
+}
+
+function manualTypeBtns(){
+  return '<div style="display:flex;gap:6px;margin-top:4px;"><button onclick="setLogType(&quot;c&quot;)" class="mini-btn">Curiosité</button><button onclick="setLogType(&quot;conf&quot;)" class="mini-btn">Confiance</button><button onclick="setLogType(&quot;conv&quot;)" class="mini-btn">Conversion</button></div>';
+}
+function showManualTypePicker(){
+  document.getElementById('log-classif-result').innerHTML=manualTypeBtns();
+}
+
+function addPub(){
+  const h=document.getElementById('log-hook').value.trim();if(!h)return;
+  const pub={id:Date.now(),date:todayStr(),hook:h,format:document.getElementById('log-format').value,type:document.getElementById('log-type').value,views:parseInt(document.getElementById('log-views').value)||0,saves:parseInt(document.getElementById('log-saves').value)||0,shares:parseInt(document.getElementById('log-shares').value)||0,comments:parseInt(document.getElementById('log-comments').value)||0,dms:parseInt(document.getElementById('log-dms').value)||0,followers:parseInt(document.getElementById('log-followers').value)||0,note:document.getElementById('log-note').value};
+  const pubs=getPubs();pubs.unshift(pub);savePubs(pubs);
+  ['log-hook','log-views','log-saves','log-shares','log-comments','log-dms','log-followers','log-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('log-type').value='c';
+  document.getElementById('log-type-display').innerHTML='<span style="font-size:13px;color:var(--color-text-tertiary);font-style:italic;">— non définie</span>';
+  document.getElementById('log-classif-result').innerHTML='';;
+  renderPubs();
+}
+function deletePub(id){savePubs(getPubs().filter(p=>p.id!==id));renderPubs();}
+function scoreExplain(s,p){
+  const score=calcScore(p);
+  const v=p.views||0;
+  if(!v)return 'Pas encore de vues.';
+  const eng=((p.saves||0)*3+(p.shares||0)*3+(p.comments||0)*2+(p.dms||0)*4);
+  const gs=calcGrowthScore(p);
+  let engTxt='';
+  if(score>=70)engTxt=`Engagement fort (${score}/100) — saves/DM élevés.`;
+  else if(score>=40)engTxt=`Engagement moyen (${score}/100) — Saves×3+Part×3+Comm×2+DM×4 = ${eng} pts / ${v} vues.`;
+  else if(score>0)engTxt=`Engagement faible (${score}/100) — peu de saves et DM malgré ${v} vues.`;
+  else engTxt='Engagement non calculable.';
+  let growTxt='';
+  if(p.followers&&v){
+    const ratio=((p.followers/v)*100).toFixed(2);
+    if(gs>=50)growTxt=` · Croissance forte : ${p.followers} abonnés pour ${v} vues (${ratio}%).`;
+    else if(gs>=15)growTxt=` · Croissance moyenne : ${p.followers} abonnés (${ratio}%).`;
+    else growTxt=` · Croissance faible : ${p.followers} abonnés (${ratio}%).`;
+  }
+  return engTxt+growTxt;
+}
+
+function editPub(id){
+  const pubs=getPubs();const p=pubs.find(x=>x.id===id);if(!p)return;
+  document.getElementById('log-hook').value=p.hook||'';
+  document.getElementById('log-format').value=p.format||'Reel';
+  const t=p.type||'c';
+  document.getElementById('log-type').value=t;
+  document.getElementById('log-type-display').innerHTML=`<span class="tag tag-${t}" style="margin:0;">${tLabel(t)}</span>`;
+  document.getElementById('log-classif-result').innerHTML=manualTypeBtns();
+  document.getElementById('log-views').value=p.views||0;
+  document.getElementById('log-saves').value=p.saves||0;
+  document.getElementById('log-shares').value=p.shares||0;
+  document.getElementById('log-comments').value=p.comments||0;
+  document.getElementById('log-dms').value=p.dms||0;
+  document.getElementById('log-followers').value=p.followers||0;
+  document.getElementById('log-note').value=p.note||'';
+  // Changer le bouton Enregistrer en Mettre à jour
+  const btn=document.querySelector('#log .btn-primary');
+  if(btn){btn.textContent='Mettre à jour';btn.onclick=()=>updatePub(id);}
+  // Scroller vers le formulaire
+  document.querySelector('#log .card').scrollIntoView({behavior:'smooth'});
+}
+
+function updatePub(id){
+  const pubs=getPubs();const idx=pubs.findIndex(p=>p.id===id);if(idx<0)return;
+  pubs[idx]={...pubs[idx],
+    hook:document.getElementById('log-hook').value.trim()||pubs[idx].hook,
+    format:document.getElementById('log-format').value,
+    type:document.getElementById('log-type').value,
+    views:parseInt(document.getElementById('log-views').value)||0,
+    saves:parseInt(document.getElementById('log-saves').value)||0,
+    shares:parseInt(document.getElementById('log-shares').value)||0,
+    comments:parseInt(document.getElementById('log-comments').value)||0,
+    dms:parseInt(document.getElementById('log-dms').value)||0,
+    followers:parseInt(document.getElementById('log-followers').value)||0,
+    note:document.getElementById('log-note').value
+  };
+  savePubs(pubs);
+  ['log-hook','log-views','log-saves','log-shares','log-comments','log-dms','log-followers','log-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('log-type').value='c';
+  document.getElementById('log-type-display').innerHTML='<span style="font-size:13px;color:var(--color-text-tertiary);font-style:italic;">— non définie</span>';
+  document.getElementById('log-classif-result').innerHTML='';
+  const btn=document.querySelector('#log .btn-primary');
+  if(btn){btn.textContent='Enregistrer';btn.onclick=addPub;}
+  renderPubs();
+}
+
+function renderPubs(){
+  const pubs=getPubs(),el=document.getElementById('pub-list');
+  if(!pubs.length){el.innerHTML='<div class="empty-state">Aucune publication.</div>';return;}
+  el.innerHTML='<div class="card"><div class="card-title">Publications ('+pubs.length+')</div>'+pubs.map(p=>{
+    const score=calcScore(p);
+    const explain=scoreExplain(score,p);
+    return `<div class="pub-row"><div class="pub-info">
+      <div class="pub-title">${p.hook}</div>
+      <div class="pub-meta"><span class="${tClass(p.type)}">${tLabel(p.type)}</span> · ${p.format} · ${p.date}</div>
+      <div class="pub-meta" style="margin-top:3px;">Vues ${p.views||0} · Saves ${p.saves||0} · Part. ${p.shares||0} · Comm. ${p.comments||0} · DM ${p.dms||0}${p.followers?` · <strong style="color:#27500A;">+${p.followers} abonnés</strong>`:''}</div>
+      ${p.note?`<div class="pub-meta" style="font-style:italic;margin-top:3px;">${p.note}</div>`:''}
+      <div class="pub-meta" style="margin-top:4px;color:var(--color-text-tertiary);font-size:11px;">${explain}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+      ${scoreLabel(score)}
+      ${p.followers?growthLabel(calcGrowthScore(p)):''}
+      <button class="mini-btn" onclick="editPub(${p.id})" style="font-size:11px;">Modifier</button>
+      <button class="del-btn" onclick="deletePub(${p.id})">Supp.</button>
+    </div></div>`;
+  }).join('')+'</div>';
+}
+let pendingClassif=null;
+function autoClassifyIdea(){
+  const input=document.getElementById('pool-free-input').value.trim();
+  const format=document.getElementById('pool-format-auto').value;
+  if(!input)return;
+  const el=document.getElementById('classif-result');
+  el.innerHTML='<div class="ai-loading">Catégorisation en cours...</div>';
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,messages:[{role:'user',content:`Tu catégorises des idées de contenu pour @juste_stre (Face caméra — corps, voix, posture, présence caméra pour femmes entrepreneuses).\n\nDéfinitions :\n- Curiosité (c) : stoppe le scroll, vérité qui dérange, paradoxe, image forte\n- Confiance (conf) : apporte de la valeur, micro-enseignement corpo, méthode\n- Conversion (conv) : montre le résultat, présente l'offre via le vécu, avant/après\n\nIdée : "${input}"\n\nRéponds en JSON sans markdown : {"type":"c|conf|conv","hook":"reformulation en 1 phrase percutante (corps en premier, direct, jamais de clichés)","raison":"1 phrase expliquant le choix"}`}]})})
+  .then(r=>r.json())
+  .then(data=>{
+    const text=data.content&&data.content[0]?data.content[0].text:'';
+    let parsed;try{parsed=JSON.parse(text.replace(/```json|```/g,'').trim());}catch(e){parsed=null;}
+    if(parsed){
+      pendingClassif={hook:parsed.hook||input,format,type:parsed.type||'c'};
+      el.innerHTML=`<div class="ai-classif"><div class="ai-classif-title">Proposition</div><div style="margin-bottom:8px;"><span class="${tClass(parsed.type)}">${tLabel(parsed.type)}</span> · ${format}</div><div class="ai-classif-body">"${parsed.hook||input}"</div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;font-style:italic;">${parsed.raison||''}</div><div class="classif-actions"><button class="btn btn-primary" onclick="confirmClassif()">Ajouter au pool</button><button class="btn" onclick="changeType('c')">Curiosité</button><button class="btn" onclick="changeType('conf')">Confiance</button><button class="btn" onclick="changeType('conv')">Conversion</button></div></div>`;
+    } else {el.innerHTML='<div style="font-size:13px;color:#E24B4A;padding:0.5rem 0;">Erreur — réessaie.</div>';}
+  }).catch(()=>{el.innerHTML='<div style="font-size:13px;color:#E24B4A;">Erreur réseau.</div>';});
+}
+function confirmClassif(){
+  if(!pendingClassif)return;
+  const pool=getPool();pool.push({id:Date.now(),...pendingClassif,used:false});savePool(pool);
+  document.getElementById('pool-free-input').value='';
+  document.getElementById('classif-result').innerHTML='<div style="font-size:13px;color:#27500A;padding:0.5rem 0;">Ajouté au pool ✓</div>';
+  pendingClassif=null;setTimeout(()=>{document.getElementById('classif-result').innerHTML='';renderPool();},1500);
+}
+function changeType(t){if(pendingClassif){pendingClassif.type=t;const span=document.querySelector('.ai-classif span.tag');if(span){span.className=`tag tag-${t}`;span.textContent=tLabel(t);}}}
+function callAIWithImage(b64,mt,prompt){return fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mt,data:b64}},{type:'text',text:prompt}]}]})}).then(r=>r.json());}
+function extractText(data){return data.content&&data.content[0]?data.content[0].text:'';}
+
+// ─── MULTI-SCREENS ───
+let pendingScreens=[];
+
+function handleMultiScreenUpload(event){
+  const files=Array.from(event.target.files).slice(0,10);
+  if(!files.length)return;
+  const readers=files.map(file=>new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=e=>resolve({dataUrl:e.target.result,name:file.name});
+    reader.readAsDataURL(file);
+  }));
+  Promise.all(readers).then(results=>{
+    pendingScreens=[...pendingScreens,...results].slice(0,10);
+    renderScreenPreviews();
+  });
+  event.target.value='';
+}
+
+function renderScreenPreviews(){
+  const container=document.getElementById('multi-screen-previews');
+  const countEl=document.getElementById('multi-screen-count');
+  const btnZone=document.getElementById('screen-analyse-btn-zone');
+  const countLabel=document.getElementById('screen-count-label');
+  if(!pendingScreens.length){container.innerHTML='';countEl.style.display='none';btnZone.style.display='none';return;}
+  container.innerHTML=pendingScreens.map((s,i)=>`
+    <div style="position:relative;display:inline-block;">
+      <img src="${s.dataUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:0.5px solid var(--color-border-secondary);" alt="screen ${i+1}">
+      <button onclick="removeScreen(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#E24B4A;color:#fff;border:none;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;">×</button>
+      <div style="font-size:10px;color:var(--color-text-tertiary);text-align:center;margin-top:2px;">${i+1}</div>
+    </div>`).join('');
+  countEl.textContent=`${pendingScreens.length} screen${pendingScreens.length>1?'s':''} chargé${pendingScreens.length>1?'s':''}`;
+  countEl.style.display='block';
+  countLabel.textContent=pendingScreens.length;
+  btnZone.style.display='block';
+  document.getElementById('screen-ai-output').innerHTML='';
+}
+
+function removeScreen(i){
+  pendingScreens.splice(i,1);
+  renderScreenPreviews();
+}
+
+function clearScreens(){
+  pendingScreens=[];
+  renderScreenPreviews();
+  document.getElementById('screen-ai-output').innerHTML='';
+}
+
+async function resizeImage(dataUrl, maxWidth=800){
+  return new Promise(resolve=>{
+    var img=new Image();
+    img.onload=function(){
+      var w=img.width,h=img.height;
+      if(w>maxWidth){h=Math.round(h*maxWidth/w);w=maxWidth;}
+      var canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      resolve(canvas.toDataURL('image/jpeg',0.7));
+    };
+    img.src=dataUrl;
+  });
+}
+
+async function analyzeAllScreens(){
+  if(!pendingScreens.length)return;
+  var output=document.getElementById('screen-ai-output');
+  output.innerHTML='<div class="ai-loading">Préparation des '+pendingScreens.length+' screens...</div>';
+  var pubs=getPubs();
+  var ctx=pubs.length?pubs.slice(0,5).map(function(p){return '"'+p.hook+'" → score '+calcScore(p)+', '+(p.saves||0)+' saves, '+(p.dms||0)+' DM';}).join('\n'):'Aucune publication.';
+
+  // Étape 1 : redimensionner et extraire chaque screen
+  var extractions=[];
+  for(var i=0;i<pendingScreens.length;i++){
+    output.innerHTML='<div class="ai-loading">Lecture du screen '+(i+1)+'/'+pendingScreens.length+'...</div>';
+    try{
+      var resized=await resizeImage(pendingScreens[i].dataUrl,600);
+      var b64=resized.split(',')[1];
+      var mt='image/jpeg';
+      var resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:300,messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mt,data:b64}},
+          {type:'text',text:'Extrait tous les chiffres et métriques visibles sur ce screen de statistiques Instagram. JSON sans markdown : {"metriques":{"nom":valeur},"contexte":"section visible"}'}
+        ]}]})
+      });
+      var data=await resp.json();
+      var text=data.content&&data.content[0]?data.content[0].text:'';
+      var parsed;try{parsed=JSON.parse(text.replace(/```json|```/g,'').trim());}catch(e){parsed={metriques:{},contexte:'screen '+(i+1)};}
+      extractions.push(parsed);
+    }catch(e){extractions.push({metriques:{},contexte:'erreur screen '+(i+1)});}
+  }
+
+  // Étape 2 : synthèse texte uniquement (pas d'images)
+  output.innerHTML='<div class="ai-loading">Synthèse en cours...</div>';
+  var summary=extractions.map(function(e,i){return 'Screen '+(i+1)+' ('+( e.contexte||'')+') : '+JSON.stringify(e.metriques||{});}).join('\n');
+
+  try{
+    var r2=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:'Tu analyses les statistiques complètes d\'une vidéo @juste_stre (Face caméra — corps, voix, posture).\n\nPublications récentes :\n'+ctx+'\n\nDonnées de '+pendingScreens.length+' screens :\n'+summary+'\n\nJSON sans markdown : {"stats_consolidees":{"vues":0,"portee":0,"sauvegardes":0,"partages":0,"commentaires":0,"dms":0,"taux_completion":"","autres":{}},"analyse":"3-4 phrases","points_forts":[""],"points_ameliorer":[""],"signal_fort":"","recommandation_prochaine_video":""}'}]})
+    });
+    var d2=await r2.json();
+    var t2=d2.content&&d2.content[0]?d2.content[0].text:'';
+    var p2;try{p2=JSON.parse(t2.replace(/```json|```/g,'').trim());}catch(e){p2=null;}
+    if(p2){
+      var s=p2.stats_consolidees||{};
+      var rows=Object.entries(s).filter(function(kv){return kv[1]&&kv[1]!==0&&kv[1]!=='';}).map(function(kv){return '<div class="pub-row" style="padding:5px 0;"><span class="pub-meta">'+kv[0].replace(/_/g,' ')+'</span><span style="font-weight:500;">'+(typeof kv[1]==='number'?kv[1].toLocaleString('fr-FR'):kv[1])+'</span></div>';}).join('');
+      var pf=(p2.points_forts||[]).map(function(p){return '<li style="margin-bottom:4px;">'+p+'</li>';}).join('');
+      var pa=(p2.points_ameliorer||[]).map(function(p){return '<li style="margin-bottom:4px;">'+p+'</li>';}).join('');
+      output.innerHTML='<div class="card" style="margin-top:0;"><div class="card-title">Chiffres consolidés ('+pendingScreens.length+' screens)</div>'+rows+'</div><div class="analysis-block ab-insight"><div class="ab-label">Analyse</div><div class="ab-text">'+(p2.analyse||'')+'</div></div><div class="analysis-block ab-win"><div class="ab-label">Points forts</div><div class="ab-text"><ul style="padding-left:16px;">'+pf+'</ul></div></div>'+(pa?'<div class="analysis-block ab-lose"><div class="ab-label">À améliorer</div><div class="ab-text"><ul style="padding-left:16px;">'+pa+'</ul></div></div>':'')+'<div class="analysis-block ab-insight" style="border-color:#7F77DD;"><div class="ab-label" style="color:#7F77DD;">Signal fort</div><div class="ab-text">'+(p2.signal_fort||'')+'</div></div><div class="analysis-block ab-ratio"><div class="ab-label">Recommandation</div><div class="ab-text">'+(p2.recommandation_prochaine_video||'')+'</div></div>';
+      var screens=getScreens();
+      screens.unshift({id:Date.now(),date:todayStr(),thumb:pendingScreens[0].dataUrl,screenCount:pendingScreens.length,stats:s,analyse:p2.analyse,signal:p2.signal_fort,reco:p2.recommandation_prochaine_video});
+      saveScreens(screens);
+      pendingScreens=[];
+      renderScreenPreviews();
+    }else{output.innerHTML='<div style="font-size:13px;padding:0.5rem 0;">'+t2+'</div>';}
+  }catch(e){output.innerHTML='<div style="color:#E24B4A;font-size:13px;">Erreur lors de la synthèse : '+e.message+'. Réessaie avec moins de screens.</div>';}
+}
+
